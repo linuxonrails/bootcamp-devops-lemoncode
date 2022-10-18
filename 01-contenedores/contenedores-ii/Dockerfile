@@ -1,5 +1,5 @@
 #Imagen que voy a utilizar como base
-FROM nginx:alpine
+FROM httpd:latest
 
 #Etiquetado
 LABEL maintainer="gisela.torres@returngis.net"
@@ -9,4 +9,4 @@ LABEL project="lemoncode"
 EXPOSE 80
 
 #Modificaciones sobre la imagen que he utilizado como base, en este caso alpine
-COPY content/ /usr/share/nginx/html/
+COPY content/ /usr/local/apache2/htdocs/
