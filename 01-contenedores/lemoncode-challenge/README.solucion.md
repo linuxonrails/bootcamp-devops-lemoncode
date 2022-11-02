@@ -13,9 +13,17 @@ docker stop some-mongo
 docker rm some-mongo
 # Borrado del volumne para la base de datos
 docker volume rm some-mongo-volume
-# Borrado del contenedor dotnet
-docker stop some-dotnet
-docker rm some-dotnet
+# Borrado del contenedor topics-api (dotnet)
+docker stop topics-api
+docker rm topics-api
+# Borrado de la imagen topics-api (dotnet)
+docker image rm topics-api:latest
+# Borrado del contenedor lemoncode-challenge-frontend
+docker stop lemoncode-challenge-frontend
+docker rm lemoncode-challenge-frontend
+# Borrado de la imagen lemoncode-challenge-frontend
+docker image rm lemoncode-challenge-frontend
+# Fin de los pasos
 ```
 
 ## Pasos a seguir
@@ -121,40 +129,64 @@ obj/
 Y construir la imagen con el siguiente comando:
 
 ```sh
-# Y construirlo con el nombre some-dotnet:
-docker build -t some-dotnet .
+# Y construirlo con el nombre topics-api:
+cd dotnet-stack/backend/ ; docker build -t topics-api .
 ```
 
 Y arrancar un contenedor con dicha imagen:
 
 ```sh
 # Y arrancarlo:
-docker run -d --name some-dotnet \
+docker run -d --name topics-api \
     -p 5000:5000 \
     --network lemoncode-challenge \
-    some-dotnet
+    topics-api
 ```
 
 ### Crear servidor frontend
 
-Creamos el Dockerfile:
+
+
+Creamos el `dotnet-stack/frontend/Dockerfile`:
 
 ```dockerfile
-TODO
+FROM node:14-alpine
+
+ENV NODE_ENV=production
+
+WORKDIR /usr/src/app
+
+COPY ["package.json", "package-lock.json*", "server.js", "views", "./"]
+
+# RUN npm install --production --silent && mv node_modules ../
+RUN npm install --production --silent
+
+COPY . .
+
+EXPOSE 3000
+
+RUN chown -R node /usr/src/app
+
+USER node
+
+CMD ["npm", "start"]
 ```
+
+Y generamos la imagen:
 
 ```sh
-# Generamos la imagen:
-docker build -t lemoncode-challenge-frontend .
+# Generar la imagen:
+cd dotnet-stack/frontend/ ; docker build -t lemoncode-challenge-frontend .
 ```
 
+Crear un container con la imagen
 
 ```sh
 # Y la ejecutamos
-docker run -d --network=lemoncode-challenge -p 8080:3000 lemoncode-challenge-frontend
+docker run -d --name lemoncode-challenge-frontend --network lemoncode-challenge -e API_URI=http://topics-api:5000/api/topics -p 8080:3000 lemoncode-challenge-frontend
 ```
 
-# docker run --name frontend -p 8080:3000 -e API_URI=http://backend:5000/api/topics --network lemoncode-challenge frontend 
+# docker run --name lemoncode-challenge-frontend -p 8080:3000 -e API_URI=http://localhost:5000/api/topics --network lemoncode-challenge lemoncode-challenge-frontend
 
 # https://app.diagrams.net/
 
