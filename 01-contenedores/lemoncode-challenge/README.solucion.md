@@ -1,30 +1,5 @@
 # Mi solución al reto de Lemoncode
 
-## Limpieza previa
-
-Limpieza previa de los datos para poder volver a aplicar los pasos de mi solución en limpio.
-La utilizo para asegurarme de que son exactamentes los pasos que he seguido y no me olvido ninguno.
-
-```sh
-# Borrado de la red creada para la aplicación
-docker network rm lemoncode-challenge
-# Parar y borrar el contenedor de mongo
-docker stop some-mongo
-docker rm some-mongo
-# Borrado del volumne para la base de datos
-docker volume rm some-mongo-volume
-# Borrado del contenedor topics-api (dotnet)
-docker stop topics-api
-docker rm topics-api
-# Borrado de la imagen topics-api (dotnet)
-docker image rm topics-api:latest
-# Borrado del contenedor lemoncode-challenge-frontend
-docker stop lemoncode-challenge-frontend
-docker rm lemoncode-challenge-frontend
-# Borrado de la imagen lemoncode-challenge-frontend
-docker image rm lemoncode-challenge-frontend
-# Fin de los pasos
-```
 
 ## Pasos a seguir
 
@@ -179,16 +154,37 @@ Y generamos la imagen:
 cd dotnet-stack/frontend/ ; docker build -t lemoncode-challenge-frontend .
 ```
 
-Crear un container con la imagen
+Crear un container con la imagen.
 
 ```sh
-# Y la ejecutamos
+# La ejecutamos en la red lemoncode-challenge
 docker run -d --name lemoncode-challenge-frontend --network lemoncode-challenge -e API_URI=http://topics-api:5000/api/topics -p 8080:3000 lemoncode-challenge-frontend
 ```
 
-# docker run --name lemoncode-challenge-frontend -p 8080:3000 -e API_URI=http://localhost:5000/api/topics --network lemoncode-challenge lemoncode-challenge-frontend
+Visitar http://localhost:8080/
 
-# https://app.diagrams.net/
+## Limpieza
 
-# dotnet run .\backend.csproj 
+Limpieza de los datos para poder volver a aplicar los pasos de mi solución en limpio.
+La utilizo para asegurarme de que son necesarios exactamente los pasos que he definido y de que no me olvido ninguno.
+
+```sh
+# Borrado de la red creada para la aplicación
+docker network rm lemoncode-challenge
+# Parar y borrar el contenedor de mongo
+docker stop some-mongo
+docker rm some-mongo
+# Borrado del volumne para la base de datos
+docker volume rm some-mongo-volume
+# Borrado del contenedor topics-api (dotnet)
+docker stop topics-api
+docker rm topics-api
+# Borrado de la imagen topics-api (dotnet)
+docker image rm topics-api:latest
+# Borrado del contenedor lemoncode-challenge-frontend
+docker stop lemoncode-challenge-frontend
+docker rm lemoncode-challenge-frontend
+# Borrado de la imagen lemoncode-challenge-frontend
+docker image rm lemoncode-challenge-frontend
+# Fin de los pasos
 ```
