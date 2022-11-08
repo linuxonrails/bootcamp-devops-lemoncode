@@ -1,0 +1,32 @@
+version: '3.4'
+services:
+  some-mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - somo-mongo-volume:/data/db
+    networks:
+      - lemoncode-challenge
+  topics-api:
+    image: topics-api:latest
+    ports: 
+      - 5000:5000
+    networks:
+      - lemoncode-challenge
+  lemoncode-challenge-frontend:
+    depends_on:
+      - some-mongo
+      - topics-api
+    image: lemoncode-challenge-frontend:latest
+    ports:
+      - 8080:3000
+    environment:
+      - API_URI=http://topics-api:5000/api/topics
+    networks:
+      - lemoncode-challenge
+networks:
+  lemoncode-challenge:
+    driver: "bridge"
+volumes:
+  somo-mongo-volume:
