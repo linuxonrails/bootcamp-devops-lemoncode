@@ -1,10 +1,12 @@
 FROM node:lts-alpine
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+COPY ["tsconfig.json", ".env.template", "package.json", "package-lock.json", "./"]
 RUN npm install --production=false
-COPY . .
+RUN npm run build 
+COPY node_modules .
+COPY dist .
 EXPOSE 5000
 RUN chown -R node /usr/src/app
 USER node
-CMD ["npm", "start"]
+CMD ["npm", "exec", "node", "./dist/app.js"]

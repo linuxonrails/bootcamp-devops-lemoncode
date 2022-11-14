@@ -6,7 +6,6 @@ WORKDIR /usr/src/app
 
 COPY ["package.json", "package-lock.json*", "server.js", "views", "./"]
 
-# RUN npm install --production --silent && mv node_modules ../
 RUN npm install --production --silent
 
 COPY . .

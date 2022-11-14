@@ -15,7 +15,7 @@
 > 3. El front-end debe comunicarse con la api a través de http://topics-api:5000/api/topics
 > 4. El front-end debe estar mapeado con el host para ser accesible a través del puerto 8080.
 > 5. El MongoDB debe almacenar la información que va generando en un volumen, mapeado a la ruta /data/db.
-> 6. Este debe de tener una base de datos llamada TopicstoreDb con una colección llamada Topics. La colección Topics debe tener esta estructura: ("_id"x"Soid":"5fa2ca6abe7a379ec4234883"),"Name":"Contenedores") ¡Añade varios registros!
+> 6. Este debe de tener una base de datos llamada TopicstoreDb con una colección llamada Topics. La colección Topics debe tener esta estructura: `("_id"x"Soid":"5fa2ca6abe7a379ec4234883"),"Name":"Contenedores")` ¡Añade varios registros!
 > 
 > Tip para backend: Antes de intentar contenerizar y llevar a cabo todos los pasos del ejercicio se recomienda intentar ejecutar la aplicación sin hacer cambios en ella. En este caso, lo único que es posible que “no tengamos a mano” es el MongoDB. Por lo que empieza por crear este en Docker, usa un cliente como el que vimos en el primer día de clase (MongoDB Compass) para añadir datos que pueda devolver la API.
 
@@ -62,7 +62,41 @@ Fundamentos Linux,1ab3dc6ggc4a234bm522423
 Cloud,2bd3dc6ggc4a234bm123456
 ```
 
+1. Conectarse a Mongo con DB Compass:
+
+  <img width="700" src="./mongo-paso-1-conectarse.png">
+
+2. Crear Database y Collection:
+
+  <img width="700" src="./mongo-paso-2-crear-Database-y-Collection.png">
+
+3. Click en TopicstoreDb Database:
+
+  <img width="700" src="./mongo-paso-3-click-en-TopicstoreDb-Database.png">
+
+4. Click en Topics Collection:
+
+<img width="700" src="./mongo-paso-4-click-en-Topics-Collection.png">
+
+5. Click en `ADD_DATA` > `Import_File`:
+
+<img width="700" src="./mongo-paso-5-click-en-ADD_DATA-Import_File.png">
+
+6. Click en `IMPORT` para añadir datos tras seleccionar CSV y el fichero `Topics.csv`:
+
+<img width="700" src="./mongo-paso-6-click-en-IMPORT-para-añadir-datos-tras-seleccionar-CSV-y-el-fichero-Topics.csv.png">
+
+7. Click en `DONE` tras completar proceso:
+
+<img width="700" src="./mongo-paso-7-click-en-DONE-tras-completar-proceso.png">
+
+8. Comprobar listado de documentos importados:
+
+<img width="700" src="./mongo-paso-8-comprobar-listado-de-documentos-importados.png">
+
 También he añadido la opción con un JSON como alternativa.
+
+### Opción dotnet
 
 #### Crear servidor backend (opción dotnet)
 
@@ -138,43 +172,9 @@ docker run -d --name topics-api \
     topics-api
 ```
 
-#### Crear servidor backend (opción node)
+Si accedemos a http://localhost:5000/api/topics debería devolvernos un JSON como el siguiente:
 
-Definir una imagen del servidor backend en dotnet que usará el código de `node-stack/backend` mediante la creación de un nuevo fichero `./node-stack/backend/Dockerfile`:
-
-##########################
-
-```dockerfile
-FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
-COPY . .
-EXPOSE 5000
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
-```
-
-Construir la imagen con el siguiente comando:
-
-```sh
-# Entramos en el directorio donde hemos creado el fichero Dockerfile:
-cd node-stack/backend/
-# Y construirlnodeo con el nombre topics-api:
-docker build -t topics-api .
-```
-
-Y arrancar un contenedor con dicha imagen:
-
-```sh
-# Y arrancarlo:
-docker run -d --name topics-api \
-    -p 5000:5000 \
-    --network lemoncode-challenge \
-    topics-api
-```
+<img src="./resultados-1.png" width="700">
 
 #### Crear servidor frontend (opción dotnet)
 
@@ -189,7 +189,6 @@ WORKDIR /usr/src/app
 
 COPY ["package.json", "package-lock.json*", "server.js", "views", "./"]
 
-# RUN npm install --production --silent && mv node_modules ../
 RUN npm install --production --silent
 
 COPY . .
@@ -218,6 +217,56 @@ docker run -d --name lemoncode-challenge-frontend --network lemoncode-challenge 
 ```
 
 Visitar http://localhost:8080/
+
+Deberíamos ver una página como la siguiente:
+
+<img src="./resultados-2.png" width="700">
+
+### Opción node
+
+#### Crear servidor backend (opción node)
+
+Definir una imagen del servidor backend en dotnet que usará el código de `node-stack/backend` mediante la creación de un nuevo fichero `./node-stack/backend/Dockerfile`:
+
+##########################
+
+!@TODO: actualizar con la últma versión !!!
+
+```dockerfile
+FROM node:lts-alpine
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY ["tsconfig.json", ".env.template", "package.json", "package-lock.json", "./"]
+RUN npm install --production=false
+RUN npm run build 
+COPY node_modules .
+COPY dist .
+EXPOSE 5000
+RUN chown -R node /usr/src/app
+USER node
+CMD ["npm", "exec", "node", "./dist/app.js"]
+```
+
+Construir la imagen con el siguiente comando:
+
+```sh
+# Entramos en el directorio donde hemos creado el fichero Dockerfile:
+cd node-stack/backend/
+# Y construirlnodeo con el nombre topics-api:
+docker build -t topics-api .
+```
+
+Y arrancar un contenedor con dicha imagen:
+
+```sh
+# Y arrancarlo:
+docker run -d --name topics-api \
+    -p 5000:5000 \
+    --network lemoncode-challenge \
+    topics-api
+```
+
+Podemos comprobar que todo ha ido bien accediendo a http://localhost:5000/api/topics
 
 ### Limpieza (paso opcional)
 
