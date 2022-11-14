@@ -20,7 +20,7 @@ Me encanta la bash!!
 
 Y `file2.txt` debe permanecer vacío.
 
-#### Solución
+#### Solución ✔️  
 
 ```bash
 mkdir -p foo/dummy
@@ -69,20 +69,20 @@ Donde `file1.txt` y `file2.txt` deben contener el siguiente texto:
 Me encanta la bash!!
 ```
 
-#### Solución
+#### Solución ✔️  
 
 ```bash
 cat foo/dummy/file1.txt > foo/dummy/file2.txt
 mv foo/dummy/file2.txt foo/empty/
 ```
 
-Podemos comprobarlo ejecutando la siguiente linea:
+Podemos probar la solución ejecutando la siguiente linea en la terminal:
 
 ```bash
 tree foo ; echo "Contenido de file1.txt:" ; echo ; find -name file1.txt -exec cat {} \; ; echo "Contenido de file2.txt:" ; find -name file2.txt -exec cat {} \;
 ```
 
-...que nos debería devolver el siguiente resultado:
+...con lo que nos debería devolver el siguiente resultado:
 
 ```bash
 foo
@@ -106,9 +106,9 @@ Si se le pasa un texto vacío al invocar el script, el texto de los ficheros, el
 Que me gusta la bash!!!!
 ```
 
-#### Solución 
+#### Solución ✔️
 
-Creamos el fichero ejercicio3.sh con el siguiente contenido:
+Creamos el fichero `ejercicio3.sh` con el siguiente contenido:
 
 ```bash
 #!/bin/bash
@@ -131,21 +131,21 @@ cat foo/dummy/file1.txt > foo/dummy/file2.txt
 mv foo/dummy/file2.txt foo/empty/
 ```
 
-Podemos comprobarlo el primer caso (cualquier texto excepto un texto vacío) ejecutando la siguiente linea:
+Si probamos el primer caso (cualquier texto excepto un texto vacío) ejecutando la siguiente linea:
 
 ```bash
 sh ./ejercicio3.sh
 ```
 
-...cumplimentando con el texto `Lore ipsum dolor est`. 
+...y cumplimentando con el texto `Lore ipsum dolor est`. 
 
-Y comprobar el resultado con la siguiente linea:
+El resultado con la siguiente linea:
 
 ```bash
 tree foo ; echo ; echo "Contenido de file1.txt:" ; find -name file1.txt -exec cat {} \; ; echo "Contenido de file2.txt:" ; find -name file2.txt -exec cat {} \;
 ```
 
-...que nos debería devolver el siguiente resultado:
+...nos debería devolver el siguiente resultado:
 
 ```bash
 foo
@@ -162,15 +162,13 @@ Contenido de file2.txt:
 Lore ipsum dolor est
 ```
 
-Podemos comprobarlo el segundo caso (texto vacío con o sin espacios) ejecutando la siguiente linea:
+Podemos probar el segundo caso (texto vacío con o sin espacios) ejecutando la siguiente linea:
 
 ```bash
 sh ./ejercicio3.sh
 ```
 
-...cumplimentando con el texto `  ` (cero o más espacios). 
-
-Y comprobar el resultado con la siguiente linea:
+...cumplimentando con el texto `  ` (cero o más espacios). Y probar el resultado con la siguiente linea:
 
 ```bash
 tree foo ; echo ; echo "Contenido de file1.txt:" ; find -name file1.txt -exec cat {} \; ; echo "Contenido de file2.txt:" ; find -name file2.txt -exec cat {} \;
@@ -212,9 +210,9 @@ $ ejercicio4.sh patata
 > Aparece por primera vez en la línea 27
 ```
 
-#### Solución
+#### Solución ✔️  
 
-Creamos el fichero ejercicio4.sh con el siguiente contenido:
+Creamos el fichero `ejercicio4.sh` con el siguiente contenido:
 
 ```bash
 #!/bin/bash
@@ -241,7 +239,7 @@ fi
 rm $TEMP_FILENAME
 ```
 
-Podemos comprobarlo ejecutando la siguiente linea:
+Podemos probar la solución propuesta con la siguiente linea:
 
 ```bash
 ./ejercicio4.sh Linux
@@ -292,9 +290,9 @@ $ ejercicio5.sh https://lemoncode.net/ patata
 > Aparece únicamente en la línea 27
 ```
 
-#### Solución
+#### Solución ✔️
 
-Creamos el fichero ejercicio4.sh con el siguiente contenido:
+Creamos el fichero `ejercicio4.sh` con el siguiente contenido:
 
 ```bash
 #!/bin/bash
