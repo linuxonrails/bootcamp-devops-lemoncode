@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
-COPY ["tsconfig.json", ".env.template", "package.json", "package-lock.json", "./"]
+COPY [".env.template", "package.json", "package-lock.json", "src", "tsconfig.json", "./"]
 RUN npm install --production=false
 RUN npm run build 
 COPY node_modules .

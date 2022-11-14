@@ -230,21 +230,8 @@ Definir una imagen del servidor backend en dotnet que usará el código de `node
 
 ##########################
 
-!@TODO: actualizar con la últma versión !!!
-
 ```dockerfile
-FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["tsconfig.json", ".env.template", "package.json", "package-lock.json", "./"]
-RUN npm install --production=false
-RUN npm run build 
-COPY node_modules .
-COPY dist .
-EXPOSE 5000
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "exec", "node", "./dist/app.js"]
+@TODO: actualizar con la últma versión !!! !!!!!!!
 ```
 
 Construir la imagen con el siguiente comando:
@@ -267,6 +254,19 @@ docker run -d --name topics-api \
 ```
 
 Podemos comprobar que todo ha ido bien accediendo a http://localhost:5000/api/topics
+
+...peeero me ha dado errores al transpilar el código de typescript a javascript:
+
+```
+src/services/mappers.ts:41:19 - error TS2349: This expression is not callable.
+  Each member of the union type '(<U>(callbackfn: (value: TopicDatabase, index: number, array: TopicDatabase[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: Topic, index: number, array: Topic[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
+
+41     return topics.map(mapTopic);
+                     ~~~
+
+
+Found 1 error.
+```
 
 ### Limpieza (paso opcional)
 
@@ -313,7 +313,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - some-mongo-volume:/data/db
+      - somo-mongo-volume:/data/db
     networks:
       - lemoncode-challenge
   topics-api:
@@ -364,6 +364,8 @@ test> db.Topics.insertMany([{_id: '5fa2ca6abe7a379ec4234883',Name: 'Contenedores
 ```
 
 pero no sé si se quiere tener siempre el mismo conjunto de datos al arrancar el contenedor de mongo :confused: Opté por importar los datos con Compass.
+
+Utilicé las imágenes y no la opción de `build: context: ./...` para que el mismo dockerfile me sirviera para la opción node.
 
 ### Limpieza (paso opcional)
 
